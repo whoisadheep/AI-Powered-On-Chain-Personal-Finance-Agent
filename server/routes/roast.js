@@ -30,7 +30,7 @@ router.post('/', async (req, res) => {
     try {
         const { contractAddress, fromAddress } = req.body
 
-        // Step 1: GoPlus check
+
         const goplusRes = await axios.get(
             `https://api.gopluslabs.io/api/v1/token_security/1?contract_addresses=${contractAddress}`
         )
@@ -54,7 +54,7 @@ router.post('/', async (req, res) => {
         console.log('GoPlus raw data:', JSON.stringify(data, null, 2))
         console.log('Facts:', facts)
 
-        // Step 2: Alchemy simulation (if fromAddress provided)
+
         let simulationSummary = "No simulation data available."
         if (fromAddress) {
             try {
@@ -74,7 +74,7 @@ router.post('/', async (req, res) => {
             }
         }
 
-        // Step 3: Feed BOTH into Gemini
+
         const userPrompt = `Here are the facts about this token:
             - Honeypot (can't sell): ${facts.isHoneypot}
             - Buy Tax: ${facts.buyTax}%
