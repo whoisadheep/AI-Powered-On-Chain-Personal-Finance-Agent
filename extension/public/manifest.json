@@ -1,0 +1,18 @@
+{
+    "manifest_version": 3,
+    "name": "Wallet Roast",
+    "version": "1.0",
+    "description": "AI Crypto Guardian - Get roasted for bad crypto decisions",
+    "action": {
+        "default_popup": "index.html"
+    },
+    "permissions": [
+        "activeTab",
+        "tabs"
+    ],
+    "host_permissions": [
+        "https://etherscan.io/*",
+        "https://www.dextools.io/*",
+        "https://app.uniswap.org/*"
+    ]
+}
