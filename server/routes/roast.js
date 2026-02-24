@@ -98,7 +98,18 @@ router.post('/', async (req, res) => {
         const cleaned = text.replace(/```json|```/g, '').trim()
         const roast = JSON.parse(cleaned)
 
-        res.json(roast)
+        res.json({
+            ...roast,
+            facts: {
+                isHoneypot: facts.isHoneypot,
+                buyTax: parseFloat(facts.buyTax),
+                sellTax: parseFloat(facts.sellTax),
+                ownerCanMint: facts.ownerCanMint,
+                hiddenOwner: facts.hiddenOwner,
+                transferPausable: facts.transferPausable,
+                isOpenSource: facts.isOpenSource
+            }
+        })
 
     } catch (err) {
         console.error(err)
