@@ -161,6 +161,32 @@ npm run dev
 
 ---
 
+## 🧪 Test With These Addresses
+
+Use these sample addresses to test the extension's features:
+
+### 🔥 Token Roast (Paste in "Contract Address" field)
+
+| Token | Address | Expected Verdict |
+|-------|---------|-----------------|
+| **USDT (Tether)** | `0xdAC17F958D2ee523a2206206994597C13D831ec7` | ✅ SAFE |
+| **SHIB (Shiba Inu)** | `0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE` | ✅ SAFE |
+| **HEX** | `0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39` | ⚠️ RISKY |
+| **Known Scam Token** | `0x076641aF1B8f06B7f8C92587156143C109002cbe` | 🚨 SCAM |
+
+### 🚔 Crypto Criminal Record (Paste in "Wallet Address" field)
+
+| Wallet | Address | Description |
+|--------|---------|-------------|
+| **Vitalik Buterin** | `0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045` | Ethereum founder |
+| **Justin Sun** | `0x3DdfA8eC3052539b6C9549F12cEA2C295cfF5296` | TRON founder |
+
+### 🧠 Transaction Interpreter
+
+Use any of the token contract addresses above as the **"To" address**, with a small ETH value (e.g., `0.01`) to simulate a transaction.
+
+---
+
 ## 📸 How It Works
 
 ### Data Flow
