@@ -116,7 +116,8 @@ Create a `.env` file in the `server/` directory:
 ```env
 PORT=3001
 GEMINI_API_KEY=your_gemini_api_key
-ALCHEMY_API_KEY=your_alchemy_api_key
+ALCHEMY_API_KEY=vhfW7VGQkcIepAXeX48gv
+GOPLUS_API_KEY=0gZ8FEq9jyZg1SX77EMs
 ```
 
 Start the server:
