@@ -111,13 +111,13 @@ function calculateRiskScore(facts) {
   if (!facts.isOpenSource) ownershipScore += 5
   ownershipScore = Math.min(ownershipScore, 35)
 
-  // Transparency (0-100)
+
   if (!facts.isOpenSource) transparencyScore += 40
   if (facts.hiddenOwner) transparencyScore += 30
   if (facts.ownerCanChangeBalance) transparencyScore += 30
   transparencyScore = Math.min(transparencyScore, 100)
 
-  // Trust (0-100)
+
   if (!facts.isTrusted) trustScore += 30
   if (facts.isHoneypot) trustScore += 40
   if (facts.ownerCanMint) trustScore += 15
@@ -170,7 +170,7 @@ function RiskRadarChart({ axes, verdictColor }) {
 
     ctx.clearRect(0, 0, size, size)
 
-    // Draw grid rings
+
     for (let ring = 1; ring <= 4; ring++) {
       const r = (maxR / 4) * ring
       ctx.beginPath()
@@ -186,7 +186,7 @@ function RiskRadarChart({ axes, verdictColor }) {
       ctx.stroke()
     }
 
-    // Draw axis lines + labels
+
     for (let i = 0; i < n; i++) {
       const angle = startAngle + angleStep * i
       const x = cx + Math.cos(angle) * maxR
@@ -199,7 +199,7 @@ function RiskRadarChart({ axes, verdictColor }) {
       ctx.lineWidth = 1
       ctx.stroke()
 
-      // Labels
+
       const labelR = maxR + 16
       const lx = cx + Math.cos(angle) * labelR
       const ly = cy + Math.sin(angle) * labelR
@@ -210,7 +210,7 @@ function RiskRadarChart({ axes, verdictColor }) {
       ctx.fillText(axes[i].label, lx, ly)
     }
 
-    // Draw data polygon (animated)
+
     ctx.beginPath()
     for (let i = 0; i <= n; i++) {
       const idx = i % n
@@ -222,14 +222,13 @@ function RiskRadarChart({ axes, verdictColor }) {
     }
     ctx.closePath()
 
-    // Fill with gradient
     const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, maxR)
     gradient.addColorStop(0, `${verdictColor}33`)
     gradient.addColorStop(1, `${verdictColor}08`)
     ctx.fillStyle = gradient
     ctx.fill()
 
-    // Stroke
+
     ctx.strokeStyle = verdictColor
     ctx.lineWidth = 2
     ctx.shadowColor = verdictColor
@@ -237,7 +236,6 @@ function RiskRadarChart({ axes, verdictColor }) {
     ctx.stroke()
     ctx.shadowBlur = 0
 
-    // Draw data points
     for (let i = 0; i < n; i++) {
       const angle = startAngle + angleStep * i
       const val = (axes[i].value / 100) * maxR * progress
@@ -252,7 +250,7 @@ function RiskRadarChart({ axes, verdictColor }) {
       ctx.fill()
       ctx.shadowBlur = 0
 
-      // Value label near point
+
       if (axes[i].value > 0 && progress > 0.8) {
         const vlR = val + 12
         const vx = cx + Math.cos(angle) * vlR
@@ -274,14 +272,14 @@ function RiskRadarChart({ axes, verdictColor }) {
     const animate = () => {
       const elapsed = Date.now() - startTime
       const t = Math.min(elapsed / duration, 1)
-      // Ease out cubic
+
       progressRef.current = 1 - Math.pow(1 - t, 3)
       draw()
 
       if (t < 1) {
         animRef.current = requestAnimationFrame(animate)
       } else {
-        // Pulse glow loop
+
         const pulse = () => {
           draw()
           animRef.current = requestAnimationFrame(pulse)
@@ -337,7 +335,6 @@ export default function App() {
   const [minting, setMinting] = useState(false)
   const [minted, setMinted] = useState(false)
 
-  // Interpreter state
   const [interpTo, setInterpTo] = useState('')
   const [interpValue, setInterpValue] = useState('')
   const [interpData, setInterpData] = useState('')
@@ -345,13 +342,11 @@ export default function App() {
   const [interpResult, setInterpResult] = useState(null)
   const [interpStep, setInterpStep] = useState(0)
 
-  // Chat state
   const [chatMessages, setChatMessages] = useState([])
   const [chatInput, setChatInput] = useState('')
   const [chatLoading, setChatLoading] = useState(false)
   const [chatOpen, setChatOpen] = useState(false)
 
-  // Criminal Record state
   const [crAddress, setCrAddress] = useState('')
   const [crLoading, setCrLoading] = useState(false)
   const [crResult, setCrResult] = useState(null)
@@ -385,7 +380,7 @@ export default function App() {
         if (accounts.length > 0) { setWalletAddress(accounts[0]); return }
       }
     } catch (e) { }
-    // Fallback: manual wallet input (MetaMask not available in extension popup)
+
     const addr = prompt('Paste your wallet address (0x...):')
     if (addr && addr.startsWith('0x') && addr.length === 42) {
       setWalletAddress(addr)
@@ -527,7 +522,7 @@ export default function App() {
 
           <div style={{ height: '1px', background: 'linear-gradient(90deg, #ff3c00, transparent)', marginBottom: '16px' }} />
 
-          {/* Tab Bar */}
+
           <div style={{
             display: 'flex', gap: '0', marginBottom: '16px',
             background: '#080808', borderRadius: '6px', border: '1px solid #1a1a1a',
@@ -805,7 +800,7 @@ export default function App() {
               </div>
             )}
 
-            {/* AI Chat Follow-Up */}
+
             {result && (
               <div style={{ marginTop: '4px' }}>
                 {!chatOpen ? (
@@ -831,7 +826,7 @@ export default function App() {
                     background: '#080808', border: '1px solid #1a1a1a',
                     borderRadius: '6px', overflow: 'hidden', marginBottom: '8px'
                   }}>
-                    {/* Chat Header */}
+
                     <div style={{
                       display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                       padding: '10px 14px', borderBottom: '1px solid #1a1a1a',
@@ -845,7 +840,7 @@ export default function App() {
                       }}>CLOSE</button>
                     </div>
 
-                    {/* Messages */}
+
                     <div style={{ maxHeight: '250px', overflowY: 'auto', padding: '12px' }}>
                       {chatMessages.length === 0 && (
                         <div style={{ textAlign: 'center', padding: '16px 0' }}>
@@ -902,7 +897,7 @@ export default function App() {
                       )}
                     </div>
 
-                    {/* Input */}
+
                     <div style={{ display: 'flex', gap: '6px', padding: '10px 12px', borderTop: '1px solid #1a1a1a' }}>
                       <input
                         value={chatInput}
@@ -969,10 +964,9 @@ export default function App() {
 
           </>)}
 
-          {/* INTERPRET TAB */}
+
           {activeTab === 'interpret' && (<>
 
-            {/* Wallet status bar (reused) */}
             <div style={{
               display: 'flex', justifyContent: 'space-between', alignItems: 'center',
               background: '#080808', border: '1px solid #1a1a1a', borderRadius: '4px',
@@ -998,7 +992,7 @@ export default function App() {
               </button>
             </div>
 
-            {/* Interpret Inputs */}
+
             <div style={{ marginBottom: '10px' }}>
               <label style={{ fontSize: '12px', letterSpacing: '3px', color: '#bbb', display: 'block', marginBottom: '6px' }}>TO ADDRESS</label>
               <input
@@ -1063,7 +1057,7 @@ export default function App() {
               {interpLoading ? '⟳ INTERPRETING...' : 'INTERPRET'}
             </button>
 
-            {/* Loading animation */}
+
             {interpLoading && (
               <div style={{ marginTop: '24px', animation: 'fadeIn 0.3s ease' }}>
                 <div style={{ fontSize: '13px', letterSpacing: '3px', color: '#00aaff', marginBottom: '16px', textAlign: 'center' }}>
@@ -1091,7 +1085,7 @@ export default function App() {
               </div>
             )}
 
-            {/* Interpret Results */}
+
             {interpResult && (() => {
               const riskConfig = {
                 LOW: { color: '#00ff88', bg: 'rgba(0,255,136,0.05)', border: 'rgba(0,255,136,0.2)' },
@@ -1103,7 +1097,7 @@ export default function App() {
               return (
                 <div style={{ marginTop: '20px', animation: 'fadeIn 0.5s ease' }}>
 
-                  {/* Risk Level Badge */}
+
                   <div style={{
                     background: rc.bg, border: `1px solid ${rc.border}`,
                     borderRadius: '4px', padding: '20px', textAlign: 'center', marginBottom: '12px'
@@ -1117,13 +1111,12 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* AI Summary */}
+
                   <div style={{ background: '#080808', border: '1px solid #1a1a1a', borderRadius: '4px', padding: '18px', marginBottom: '12px' }}>
                     <div style={{ fontSize: '13px', letterSpacing: '3px', color: '#00aaff', marginBottom: '10px' }}>AI INTERPRETATION</div>
                     <p style={{ color: '#eee', fontSize: '15px', lineHeight: '1.6', margin: 0 }}>{interpResult.summary}</p>
                   </div>
 
-                  {/* Warnings */}
                   {interpResult.warnings && interpResult.warnings.length > 0 && (
                     <div style={{ background: 'rgba(255,34,68,0.05)', border: '1px solid rgba(255,34,68,0.15)', borderRadius: '4px', padding: '16px', marginBottom: '12px' }}>
                       <div style={{ fontSize: '13px', letterSpacing: '3px', color: '#ff2244', marginBottom: '10px' }}>⚠️ WARNINGS</div>
@@ -1136,7 +1129,7 @@ export default function App() {
                     </div>
                   )}
 
-                  {/* Details */}
+
                   {interpResult.details && interpResult.details.length > 0 && (
                     <div style={{ background: '#080808', border: '1px solid #1a1a1a', borderRadius: '4px', padding: '16px', marginBottom: '12px' }}>
                       <div style={{ fontSize: '13px', letterSpacing: '3px', color: '#00aaff', marginBottom: '10px' }}>📋 TRANSACTION DETAILS</div>
@@ -1149,7 +1142,7 @@ export default function App() {
                     </div>
                   )}
 
-                  {/* Raw simulation data */}
+
                   {interpResult.simulation && interpResult.simulation.changes && interpResult.simulation.changes.length > 0 && (
                     <div style={{ background: '#080808', border: '1px solid #1a1a1a', borderRadius: '4px', padding: '16px', marginBottom: '12px' }}>
                       <div style={{ fontSize: '13px', letterSpacing: '3px', color: '#aaa', marginBottom: '10px' }}>📊 RAW ASSET CHANGES</div>
@@ -1164,7 +1157,6 @@ export default function App() {
                     </div>
                   )}
 
-                  {/* Reset button */}
                   <button
                     onClick={() => { setInterpResult(null); setInterpStep(0); setInterpTo(''); setInterpValue(''); setInterpData('') }}
                     style={{
@@ -1184,10 +1176,10 @@ export default function App() {
 
           </>)}
 
-          {/* CRIMINAL RECORD TAB */}
+
           {activeTab === 'record' && (<>
 
-            {/* Target wallet input */}
+
             <div style={{ marginBottom: '10px' }}>
               <label style={{ fontSize: '12px', letterSpacing: '3px', color: '#bbb', display: 'block', marginBottom: '6px' }}>SUSPECT WALLET ADDRESS</label>
               <input
@@ -1252,7 +1244,7 @@ export default function App() {
               {crLoading ? '⟳ INVESTIGATING...' : 'RUN BACKGROUND CHECK'}
             </button>
 
-            {/* Loading */}
+
             {crLoading && (
               <div style={{ marginTop: '24px', animation: 'fadeIn 0.3s ease' }}>
                 <div style={{ fontSize: '13px', letterSpacing: '3px', color: '#ff2244', marginBottom: '16px', textAlign: 'center' }}>
@@ -1274,7 +1266,7 @@ export default function App() {
               </div>
             )}
 
-            {/* Criminal Record Result */}
+
             {crResult && (() => {
               try {
                 const levelConfig = {
@@ -1289,7 +1281,7 @@ export default function App() {
                 return (
                   <div style={{ marginTop: '20px', animation: 'fadeIn 0.5s ease' }}>
 
-                    {/* Header Card */}
+
                     <div style={{
                       background: lc.bg, border: `1px solid ${lc.border}`,
                       borderRadius: '4px', padding: '20px', textAlign: 'center', marginBottom: '12px',
@@ -1316,7 +1308,7 @@ export default function App() {
                       </div>
                     </div>
 
-                    {/* Stats Bar */}
+
                     <div style={{
                       display: 'flex', gap: '6px', marginBottom: '12px'
                     }}>
@@ -1336,7 +1328,6 @@ export default function App() {
                       ))}
                     </div>
 
-                    {/* Charges */}
                     {crResult.charges && crResult.charges.length > 0 && (
                       <div style={{ background: '#080808', border: '1px solid #1a1a1a', borderLeft: '3px solid #ff2244', borderRadius: '4px', padding: '16px', marginBottom: '12px' }}>
                         <div style={{ fontSize: '13px', letterSpacing: '3px', color: '#ff2244', marginBottom: '10px' }}>⚖️ CHARGES</div>
@@ -1348,7 +1339,7 @@ export default function App() {
                       </div>
                     )}
 
-                    {/* Priors */}
+
                     {crResult.priors && crResult.priors.length > 0 && (
                       <div style={{ background: '#080808', border: '1px solid #1a1a1a', borderLeft: '3px solid #ffaa00', borderRadius: '4px', padding: '16px', marginBottom: '12px' }}>
                         <div style={{ fontSize: '13px', letterSpacing: '3px', color: '#ffaa00', marginBottom: '10px' }}>📄 PRIOR OFFENSES</div>
@@ -1360,19 +1351,19 @@ export default function App() {
                       </div>
                     )}
 
-                    {/* Verdict */}
+
                     <div style={{ background: '#080808', border: '1px solid #1a1a1a', borderRadius: '4px', padding: '18px', marginBottom: '12px' }}>
                       <div style={{ fontSize: '13px', letterSpacing: '3px', color: '#ff2244', marginBottom: '10px' }}>🔨 JUDGE'S VERDICT</div>
                       <p style={{ color: '#eee', fontSize: '16px', lineHeight: '1.6', margin: 0, fontStyle: 'italic' }}>"{crResult.verdict}"</p>
                     </div>
 
-                    {/* Advice */}
+
                     <div style={{ background: '#080808', border: '1px solid #1a1a1a', borderLeft: '3px solid #00aaff', borderRadius: '4px', padding: '18px', marginBottom: '12px' }}>
                       <div style={{ fontSize: '13px', letterSpacing: '3px', color: '#00aaff', marginBottom: '10px' }}>💡 REHABILITATION ADVICE</div>
                       <p style={{ color: '#ccc', fontSize: '15px', lineHeight: '1.6', margin: 0 }}>{crResult.advice}</p>
                     </div>
 
-                    {/* Token Holdings */}
+
                     {crResult.tokens && crResult.tokens.length > 0 && (
                       <div style={{ background: '#080808', border: '1px solid #1a1a1a', borderRadius: '4px', padding: '16px', marginBottom: '12px' }}>
                         <div style={{ fontSize: '13px', letterSpacing: '3px', color: '#aaa', marginBottom: '10px' }}>💼 EVIDENCE (TOKEN HOLDINGS)</div>
@@ -1395,7 +1386,7 @@ export default function App() {
                       </div>
                     )}
 
-                    {/* Reset */}
+
                     <button
                       onClick={() => { setCrResult(null); setCrStep(0) }}
                       style={{
