@@ -14,10 +14,10 @@ const alchemy = new Alchemy({
 const systemPrompt = `You are the Crypto RoastMaster. You are ruthless and sarcastic but technically accurate. 
 You only roast based on the facts given to you. Never invent information.
 
-Use these strict verdict rules:
-- SCAM: if honeypot is true OR sell tax is above 20%
-- RISKY: if buy/sell tax is between 5-20% OR owner can mint
-- SAFE: if honeypot is false AND taxes are below 5% AND owner cannot mint
+Use these strict verdict rules in order:
+- SCAM: if honeypot is true OR sell tax above 20% OR cannot sell all is true
+- RISKY: if hidden owner true OR owner can mint true OR owner can change balance true OR buy/sell tax between 1-20% OR transfer pausable true OR NOT open source
+- SAFE: only if trusted token OR (honeypot false AND taxes 0% AND open source true AND hidden owner false AND cannot mint false AND owner cannot change balance)
 
 Always respond in this exact JSON format with no extra text:
 {
@@ -48,8 +48,12 @@ router.post('/', async (req, res) => {
             hiddenOwner: data.hidden_owner === "1",
             cannotSellAll: data.cannot_sell_all === "1",
             transferPausable: data.transfer_pausable === "1",
-            isOpenSource: data.is_open_source === "1"
+            isOpenSource: data.is_open_source === "1",
+            isTrusted: data.trust_list === "1",
+            ownerCanChangeBalance: data.owner_change_balance === "1"
         }
+
+        const tokenName = data.token_name && data.token_symbol ? `${data.token_name} (${data.token_symbol})` : 'Unknown Token'
 
         console.log('GoPlus raw data:', JSON.stringify(data, null, 2))
         console.log('Facts:', facts)
@@ -76,17 +80,19 @@ router.post('/', async (req, res) => {
 
 
         const userPrompt = `Here are the facts about this token:
-            - Honeypot (can't sell): ${facts.isHoneypot}
-            - Buy Tax: ${facts.buyTax}%
-            - Sell Tax: ${facts.sellTax}%
-            - Can mint unlimited tokens: ${facts.ownerCanMint}
-            - Hidden owner (can rug): ${facts.hiddenOwner}
-            - Can pause all transfers: ${facts.transferPausable}
-            - Cannot sell all tokens: ${facts.cannotSellAll}
-            - Open source contract: ${facts.isOpenSource}
-            - Simulation Result: ${simulationSummary}
+- Honeypot (can't sell): ${facts.isHoneypot}
+- Buy Tax: ${facts.buyTax}%
+- Sell Tax: ${facts.sellTax}%
+- Can mint unlimited tokens: ${facts.ownerCanMint}
+- Hidden owner (can rug): ${facts.hiddenOwner}
+- Owner can change balances: ${facts.ownerCanChangeBalance}
+- Can pause all transfers: ${facts.transferPausable}
+- Cannot sell all tokens: ${facts.cannotSellAll}
+- Open source contract: ${facts.isOpenSource}
+- Trusted/verified token: ${facts.isTrusted}
+- Simulation Result: ${simulationSummary}
 
-            Roast this token.`
+Roast this token.`
 
         const model = genAI.getGenerativeModel({
             model: "gemini-2.5-flash",
@@ -100,6 +106,7 @@ router.post('/', async (req, res) => {
 
         res.json({
             ...roast,
+            tokenName,
             facts: {
                 isHoneypot: facts.isHoneypot,
                 buyTax: parseFloat(facts.buyTax),
@@ -107,7 +114,9 @@ router.post('/', async (req, res) => {
                 ownerCanMint: facts.ownerCanMint,
                 hiddenOwner: facts.hiddenOwner,
                 transferPausable: facts.transferPausable,
-                isOpenSource: facts.isOpenSource
+                isOpenSource: facts.isOpenSource,
+                ownerCanChangeBalance: facts.ownerCanChangeBalance,
+                isTrusted: facts.isTrusted
             }
         })
 

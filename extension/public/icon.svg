@@ -1,0 +1,24 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Wallet Body -->
+  <rect x="20" y="50" width="88" height="50" rx="12" fill="#1E1E2F"/>
+  
+  <!-- Wallet Flap -->
+  <rect x="20" y="40" width="88" height="25" rx="10" fill="#2A2A40"/>
+
+  <!-- Wallet Button -->
+  <circle cx="85" cy="65" r="5" fill="#FFB703"/>
+
+  <!-- Flame -->
+  <path d="M64 15 
+           C50 35, 80 35, 64 60
+           C90 40, 80 20, 64 15Z"
+        fill="#FF6B00"/>
+
+  <!-- Inner Flame -->
+  <path d="M64 25
+           C56 40, 72 40, 64 55
+           C78 42, 70 30, 64 25Z"
+        fill="#FFD166"/>
+
+</svg>
