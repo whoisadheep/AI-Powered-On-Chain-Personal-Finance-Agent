@@ -83,12 +83,33 @@ git clone https://github.com/whoisadheep/AI-Powered-On-Chain-Personal-Finance-Ag
 cd AI-Powered-On-Chain-Personal-Finance-Agent
 ```
 
-### 2. Setup the Backend
+### 2. Install Root Dependencies
+
+Install the shared root-level packages (`axios`, `ethers`, `@google/generative-ai`):
+
+```bash
+npm install --legacy-peer-deps
+```
+
+> **⚠️ Note:** You **must** use `--legacy-peer-deps` to avoid peer dependency conflicts.
+
+If `axios` or `ethers` are still missing after install, install them explicitly:
+
+```bash
+npm install axios ethers @google/generative-ai --legacy-peer-deps
+```
+
+### 3. Setup the Backend
 
 ```bash
 cd server
 npm install
 ```
+
+> **⚠️ Note:** If `@google/generative-ai` is not installed automatically, install it manually:
+> ```bash
+> npm install @google/generative-ai
+> ```
 
 Create a `.env` file in the `server/` directory:
 
@@ -104,21 +125,38 @@ Start the server:
 node index.js
 ```
 
-### 3. Setup the Extension
+### 4. Setup the Extension
 
 ```bash
 cd extension
-npm install
+npm install --legacy-peer-deps
+```
+
+> **⚠️ Note:** Use `--legacy-peer-deps` here as well to avoid peer dependency conflicts.
+
+**Build the extension** (this generates the `dist` folder required by Chrome):
+
+```bash
+npm run build
+```
+
+> **💡 Important:** The `dist` folder is **not** included in the GitHub repo (it's in `.gitignore`). You **must** run `npm run build` to generate it before loading the extension in Chrome.
+
+For development with hot-reload (optional):
+
+```bash
 npm run dev
 ```
 
-### 4. Load in Chrome
+### 5. Load in Chrome
 
 1. Open `chrome://extensions/`
 2. Enable **Developer Mode**
 3. Click **Load Unpacked**
 4. Select the `extension/dist` folder
 5. Pin the WalletRoast extension
+
+> **⚠️ Troubleshooting:** If you don't see the `dist` folder, make sure you ran `npm run build` in the `extension/` directory first (see Step 4).
 
 ---
 
